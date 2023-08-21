@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudTeller-Map Version</title>
+    <link rel="icon" type="image/x-icon" href="favicon.png">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet", href="mapstyle.css">
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
+</head>
+<body>
+    <style>
+        .mapboxgl-popup {
+            max-width: 400px;
+            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        }
+    </style>
+    <nav class="navbar navbar-expand-lg  navy ">
+        <div class="container-fluid">
+          <a class="navbar-brand fs-1 display-1" href="#">CloudTeller <img src="icon.png"></a>
+          <a class="normalview navbar-brand fs-6" href="/"><p class="normal">Normal View</p></a>
+          <a class="mapview navbar-brand fs-6" href="/map" ><p class="mapvw">Map View</p></a>
+            </ul>   
+          </div>
+        </div>
+    </nav>
+
+    <style>
+        .mapboxgl-popup {
+            max-width: 400px;
+            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        }
+    </style>
+
+    
+
+      <div id='map' style='width: 100vw; height: 100vh;'></div>
+      
+
+
+      <footer class="foot">
+        <p>CloudTeller is a Weather App made using Weather API, Javascript Mapbox .It is made out of HTML CSS Bootstrap Javascript Node js and Express.<br>
+        It consists of various data like Humidity,Temperature and Many more!! Explore !!!</p>
+        <p>CloudTeller|cloudteller@gmail.com|@copyright </p>
+      </footer>
+    
+</body>
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
+<script>
+
+    mapboxgl.accessToken = 'pk.eyJ1IjoicHJldGlzaGEiLCJhIjoiY2xsa2NkZXdwMThhZDNsdDY3YnBqOG4yZiJ9.FFwddSS6ZbiDQ9ee71wyuw';
+    var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v11'
+    });
+
+
+    map.on('click', (e) => {
+    const coordinates = e.lngLat;
+
+    // Reverse geocode coordinates to get city name
+    const geocodeUrl = `https://api.mapbox.com/geocoding/v5/mapbox.places/${coordinates.lng},${coordinates.lat}.json?access_token=${mapboxgl.accessToken}`;
+
+    fetch(geocodeUrl)
+        .then(response => response.json())
+        .then(data => {
+            const city = data.features[1].text; // Get the first feature's text (usually the city name)
+
+            // Define options for weather API request
+            const weatherOptions = {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': 'ac4f77b15bmsh5b82e6eb6fa7f20p1fa7c5jsnd85a5ea85884',
+                    'X-RapidAPI-Host': 'weather-by-api-ninjas.p.rapidapi.com'
+                }
+            };
+
+            // Fetch weather data
+            const weatherUrl = `https://weather-by-api-ninjas.p.rapidapi.com/v1/weather?city=${city}`;
+            fetch(weatherUrl, weatherOptions)
+                .then(response => response.json())
+                .then(result => {
+                    const temperature = result.temp;
+                    const popupContent = `
+                        <div>
+                            <h3>Weather in ${city}</h3>
+                            <p>Temperature: ${temperature}&deg;C</p>
+                            <!-- Add other weather data here if needed -->
+                        </div>
+                    `;
+
+                    new mapboxgl.Popup()
+                        .setLngLat(coordinates) // Set the popup's location
+                        .setHTML(popupContent)
+                        .addTo(map);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        })
+        .catch(error => {
+            console.error(error);
+        });
+});
+
+    
+
+   
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</html>

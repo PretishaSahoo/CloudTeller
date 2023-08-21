@@ -1,0 +1,29 @@
+.navy{
+    background-color:rgb(243, 238, 238);  
+    left:0;
+    top:0;
+    right:0;
+}
+
+.foot{
+    background-color:rgb(188, 204, 209);
+    position:fixed;
+    left:0;
+    bottom:0;
+    right:0;
+    padding:10px;
+    height:100px;
+}
+
+.normal,.mapvw{
+    color:darkslateblue;
+    font-weight: 800;
+}
+
+.normal:hover{
+    color:aqua;
+}
+
+.mapvw:hover{
+    color:aqua;
+}
