@@ -82,10 +82,16 @@
                 .then(response => response.json())
                 .then(result => {
                     const temperature = result.temp;
+                    const humidity=result.humidity;
+                    const feels_like=result.feels_like;
+                    const wind_speed=result.wind_speed;
                     const popupContent = `
                         <div>
                             <h3>Weather in ${city}</h3>
-                            <p>Temperature: ${temperature}&deg;C</p>
+                            <p>Temperature: ${temperature}°C</p>
+                            <p>Humidity: ${humidity} %</p>
+                            <p>feels like ${feels_like}°C</p>
+                            <p>wind speed: ${wind_speed} km/hr</p>
                             <!-- Add other weather data here if needed -->
                         </div>
                     `;
